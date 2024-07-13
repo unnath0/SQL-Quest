@@ -1,0 +1,176 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/output.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/TextPlugin.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <title>SQL Quest</title>
+  </head>
+  <body class="px-24 py-10 bg-[#0a0a0b]">
+    <section>
+      <div>
+        <header class="fixed bg-[#0a0a0b] inset-x-0 top-0 z-50">
+          <nav class="flex items-center justify-between py-6 px-8 lg:px-8" aria-label="Global">
+            
+            <div class="flex lg:flex-1">
+              <div class="flex flex-row">
+                <div class="mr-1"><img class="h-8 w-auto" src="{% static 'svg/database.svg' %}" alt="" /></div>
+                <div>
+                  <a href="{% url 'homeVAR' %}">
+                    <h1 class="text-2xl text-slate-50 uppercase font-normal font-sans leading-10 tracking-[-0.049375rem]">
+                      <span>SQL</span> Quest
+                    </h1>
+                  </a>
+                </div>
+              </div>
+            </div>
+            
+            <div class="hidden lg:flex lg:gap-x-12">
+              <a href="{% url 'homeVAR' %}" class="text-sm leading-6 text-gray-100 relative group inline-block transition-transform transform-gpu hover:translate-y-[-2px] hover:text-gray-100">
+                Home
+                <span class="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-100 rounded-full opacity-0 group-hover:opacity-100 animate-bubble animate-wiggle"></span>
+              </a>
+              <a href="{% url 'solveVAR' %}" class="text-sm leading-6 text-gray-400 relative group inline-block transition-transform transform-gpu hover:translate-y-[-2px] hover:text-gray-100">
+                Solve
+                <span class="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-100 rounded-full opacity-0 group-hover:opacity-100 animate-bubble animate-wiggle"></span>
+              </a>
+              {% if request.session.Current_UserID %}
+              <a href="{% url 'sandboxVAR' %}" class="text-sm leading-6 text-gray-400 relative group inline-block transition-transform transform-gpu hover:translate-y-[-2px] hover:text-gray-100">
+                Sandbox
+                <span class="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-100 rounded-full opacity-0 group-hover:opacity-100 animate-bubble"></span>
+              </a>
+              {% endif %}
+              <a href="{% url 'helpVAR' %}" class="text-sm leading-6 text-gray-400 relative group inline-block transition-transform transform-gpu hover:translate-y-[-2px] hover:text-gray-100">
+                Help
+                <span class="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-100 rounded-full opacity-100 animate-bubble"></span>
+              </a>
+              <a href="{% url 'aboutVAR' %}" class="text-sm leading-6 text-gray-400 relative group inline-block transition-transform transform-gpu hover:translate-y-[-2px] hover:text-gray-100">
+                About us
+                <span class="absolute bottom-[-1rem] left-1/2 transform -translate-x-1/2 w-3 h-3 bg-gray-100 rounded-full opacity-0 group-hover:opacity-100 animate-bubble"></span>
+              </a>
+            </div>
+
+            <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+              {% if not request.session.Current_UserID %}
+                  <!-- If user is not logged in, show login and sign-up links -->
+                  <a href="{% url 'loginVAR' %}" class="mr-3 relative rounded-md bg-transparent px-5 py-2.5 text-sm text-gray-50 border border-gray-600 shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-300 ease-in-out">
+                      <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2"></span>
+                      Log In
+                  </a>
+                  <a href="{% url 'signupVAR' %}" class="relative rounded-md bg-gray-50 px-5 py-2.5 text-sm text-gray-950 shadow-sm hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-300 ease-in-out">
+                      <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2"></span>
+                      Sign Up
+                  </a>
+              {% else %}
+                  <!-- If user is logged in, show logout button -->
+                  <p class="relative rounded-md bg-gray-50 px-5 py-2.5 text-sm text-gray-950 shadow-sm  focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-300 ease-in-out">
+                    <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2"></span>
+                    Welcome {{request.session.Current_UserName}}
+                  </p>
+                  <form action="{% url 'logoutVAR_virtual' %}" method="post" class="mr-3">
+                      {% csrf_token %}
+                      <button type="submit" class="relative rounded-md bg-transparent px-5 py-2.5 text-sm text-gray-50 border border-gray-600 shadow-sm hover:bg-gray-800 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 transition-transform duration-300 ease-in-out">
+                          <span class="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2"></span>
+                          Log Out
+                      </button>
+                  </form>
+              {% endif %}
+            </div>
+
+          </nav>
+        </header>
+      </div>
+    </section>
+
+    <section class="mt-[10%] bg-black-900 text-white font-sans">
+        <div class="max-w-7xl mx-auto p-2 text-2xl">
+          <h1 class="text-7xl mb-6 text-blue-600 font-semibold">Introduction to MySQL</h1>
+      
+          <p>MySQL is one of the most popular relational database management systems (RDBMS) used worldwide. It is an open-source software that allows users to efficiently manage and manipulate large volumes of data. MySQL is widely favored for its reliability, ease of use, scalability, and robust features. It's commonly used in web development, powering many dynamic websites and applications, including content management systems, e-commerce platforms, and more.</p>
+      
+          <h2 class="text-4xl mt-8 mb-4 text-blue-600 font-semibold">Key Features of MySQL:</h2>
+          <ul class="list-disc list-inside mb-6" style="text-align: justify;">
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">Relational Database:</span> MySQL follows the relational model, organizing data into tables with rows and columns, facilitating efficient storage and retrieval.</li>
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">Scalability:</span> MySQL can handle large datasets and can be scaled up to meet growing demands by adding more resources or using clustering and sharding techniques.</li>
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">High Performance:</span> MySQL is optimized for performance, offering fast data processing and query execution, making it suitable for high-traffic websites and applications.</li>
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">Security:</span> MySQL provides robust security features, including user authentication, access control, encryption, and data integrity mechanisms, ensuring data privacy and protection.</li>
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">Cross-Platform Compatibility:</span> MySQL is available for various operating systems, including Linux, Windows, macOS, and others, making it versatile and widely accessible.</li>
+            <li style="display: inline-block; width: 100%;"></li>
+            <li style="display: inline-block; width: 100%;"><span class="text-3xl text-blue-200 mb-2">Replication and Backup:</span> MySQL supports replication and backup functionalities, allowing users to replicate data across multiple servers for fault tolerance and create backups for disaster recovery.</li>
+  
+          </ul>
+          
+      
+          <h2 class="text-4xl mb-4 text-blue-600 font-semibold">Advantages of MySQL:</h2>
+          <ul class="list-disc list-inside mb-6">
+            <li>Open-source and free to use.</li>
+            <li>Highly reliable and scalable.</li>
+            <li>Offers excellent performance even with large datasets.</li>
+            <li>Supports various programming languages and platforms.</li>
+            <li>Has a large and active community for support and resources.</li>
+          </ul>
+      
+          <h2 class="text-4xl mb-4 text-blue-600 font-semibold">Disadvantages of MySQL:</h2>
+          <ul class="list-disc list-inside mb-6">
+            <li>Lacks some advanced features compared to other commercial database management systems.</li>
+            <li>Complex queries can sometimes be difficult to optimize.</li>
+            <li>May have limitations in handling very large datasets or high concurrency scenarios.</li>
+            <li>Requires proper configuration and tuning for optimal performance.</li>
+          </ul>
+      
+          <h2 class="text-4xl mb-4 text-blue-600 font-semibold">Basic Syntaxes:</h2>
+      
+          <h3 id="ddl-commands" class="text-3xl text-blue-200 mb-2">1. Using a Database</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">USE database_name;</code></pre>
+      
+          <h3  class="text-3xl text-blue-200 mb-2">2. Creating a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">CREATE TABLE table_name (
+        column1 datatype,
+        column2 datatype,
+        ...
+      );</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">3. Inserting Data into a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">INSERT INTO table_name (column1, column2, ...) 
+      VALUES (value1, value2, ...);</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">4. Selecting Data from a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">SELECT column1, column2, ...
+      FROM table_name;</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">5. Updating Data in a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">UPDATE table_name
+      SET column1 = value1, column2 = value2, ...
+      WHERE condition;</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">6. Deleting Data from a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">DELETE FROM table_name
+      WHERE condition;</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">7. Dropping a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">DROP TABLE table_name;</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">8. Adding a Column to a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-4"><code class="text-white">ALTER TABLE table_name
+      ADD column_name datatype;</code></pre>
+      
+          <h3 class="text-3xl text-blue-200 mb-2">9. Deleting a Column from a Table</h3>
+          <pre class="bg-gray-800 p-4 mb-6"><code class="text-white">ALTER TABLE table_name
+      DROP COLUMN column_name;</code></pre>
+      
+          <p>These SQL commands form the foundation for interacting with MySQL databases, allowing users to create, manipulate, and query data effectively. Understanding these commands is essential for anyone working with MySQL databases.</p>
+        </div>
+      
+    </section>
+  </body>
+</html>
